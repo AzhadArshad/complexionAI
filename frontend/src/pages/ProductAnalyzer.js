@@ -1,21 +1,44 @@
-import React, { useState } from 'react';
-import { Upload, Send, Sparkles } from 'lucide-react';
-import Card from '../components/UI/Card';
-import Button from '../components/UI/Button';
-import './ProductAnalyzer.css';
+import React, { useState, useRef } from "react";
+import { Upload, Send, Sparkles } from "lucide-react";
+import Card from "../components/UI/Card";
+import Button from "../components/UI/Button";
+import "./ProductAnalyzer.css";
 
 const ProductAnalyzer = () => {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
+  const fileInputRef = useRef();
 
   const handleUpload = () => {
-    console.log('Upload clicked');
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+    formData.append("auth_user_id", "USER_AUTH_ID_HERE");
+
+    try {
+      const res = await fetch("http://localhost:8000/api/analyze-product", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      console.log("AI Response:", data);
+      alert("Analysis complete! Check console.");
+    } catch (error) {
+      console.error("Upload error:", error);
+    }
   };
 
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (message.trim()) {
-      console.log('Sending message:', message);
-      setMessage('');
+      console.log("Sending message:", message);
+      setMessage("");
     }
   };
 
@@ -44,7 +67,8 @@ const ProductAnalyzer = () => {
               suitable for your skin type.
             </p>
             <p className="assistant-prompt">
-              Click the <Upload size={16} /> button below to upload a product image!
+              Click the <Upload size={16} /> button below to upload a product
+              image!
             </p>
           </div>
         </div>
@@ -58,6 +82,14 @@ const ProductAnalyzer = () => {
             Upload Image
           </Button>
         </div>
+
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          style={{ display: "none" }}
+        />
 
         <form onSubmit={handleSendMessage} className="chat-input-container">
           <input
