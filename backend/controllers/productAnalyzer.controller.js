@@ -1,3 +1,4 @@
+// controllers/productAnalyzer.controller.js
 import { extractIngredients } from "../services/ingredientExtractor.service.js";
 import { analyzeProduct } from "../services/productAnalysis.service.js";
 import { getUserByAuthId } from "../services/user.service.js";
@@ -5,17 +6,17 @@ import { getUserByAuthId } from "../services/user.service.js";
 export const analyzeProductController = async (req, res) => {
   try {
     const authId = req.body.auth_user_id;
+    if (!req.file) {
+      return res.status(400).json({ error: "No image uploaded" });
+    }
+
     const imagePath = req.file.path;
 
-    // Fetch user skin profile
-    const user = await getUserByAuthId(authId);
-    if (!user) return res.status(404).json({ error: "User not found" });
-
-    // Extract ingredients from image
+    // Step 1: Extract ingredients
     const ingredients = await extractIngredients(imagePath);
 
-    // Analyze compatibility
-    const analysis = await analyzeProduct(ingredients, user);
+    // Step 2: Full analysis
+    const analysis = await analyzeProduct(ingredients, imagePath, authId);
 
     res.json({
       status: "success",
@@ -23,6 +24,7 @@ export const analyzeProductController = async (req, res) => {
       analysis,
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Analysis error:", err);
+    res.status(500).json({ error: err.message || "Analysis failed" });
   }
 };

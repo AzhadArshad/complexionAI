@@ -1,41 +1,57 @@
+// services/productAnalysis.service.js
 import { openai } from "../config/openai.js";
+import { getUserByAuthId } from "./user.service.js";
+import fs from "fs";
 
-export const analyzeProduct = async (ingredients, user) => {
-  const userProfile = `
-Skin Type: ${user.skin_type}
-Skin Tone: ${user.skin_tone}
-Main Concerns: ${user.main_concerns}
-Allergies: ${user.allergies}
-`;
+export const analyzeProduct = async (ingredients, imagePath, auth_user_id) => {
+  const imageBuffer = fs.readFileSync(imagePath);
+  const base64Image = imageBuffer.toString("base64");
+  const imageDataUri = `data:image/jpeg;base64,${base64Image}`;
+
+  const user = await getUserByAuthId(1);
+  if (!user || user.length === 0) {
+    throw new Error("User not found");
+  }
+  const userProfile = user[0];
 
   const prompt = `
-You are a skincare expert.
-Analyze the product ingredients relative to the user's skin.
+You are a professional dermatologist and skincare formulator.
 
 User Profile:
-${userProfile}
+- Skin type: ${userProfile.skin_type || "Unknown"}
+- Main concerns: ${userProfile.main_concerns || "None specified"}
+- Allergies/Sensitivities: ${userProfile.allergies || "None"}
 
-Product Ingredients:
+Ingredients extracted:
 ${ingredients}
 
-Return JSON with no extra textwait write now the:
-{
-  "compatibility_score": number (0-100),
-  "benefits": [],
-  "warnings": [],
-  "acne_trigger_risk": "Low/Medium/High",
-  "recommendation_summary": "..."
-}
-  `;
+Tasks:
+1. Confirm the ingredient list looks complete and accurate
+2. Highlight any potentially irritating, comedogenic, drying, or beneficial ingredients
+3. Flag known allergens or controversial ingredients (e.g. fragrance, essential oils, denatured alcohol)
+4. Give a compatibility score out of 100
+5. Short summary: Is this product recommended for this user? Why?
+
+Respond in clear, structured markdown.
+`;
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4.1",
+    model: "gpt-4o-mini",
+    temperature: 0.5,
     messages: [
-      { role: "system", content: "You return JSON only." },
-      { role: "user", content: prompt },
+      {
+        role: "user",
+        content: [
+          { type: "text", text: prompt },
+          {
+            type: "image_url",
+            image_url: { url: imageDataUri },
+          },
+        ],
+      },
     ],
-    response_format: { type: "json_object" },
+    max_tokens: 1500,
   });
 
-  return JSON.parse(response.choices[0].message.content);
+  return response.choices[0].message.content;
 };
