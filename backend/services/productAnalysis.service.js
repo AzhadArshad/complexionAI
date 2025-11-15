@@ -8,7 +8,7 @@ export const analyzeProduct = async (ingredients, imagePath, auth_user_id) => {
   const base64Image = imageBuffer.toString("base64");
   const imageDataUri = `data:image/jpeg;base64,${base64Image}`;
 
-  const user = await getUserByAuthId(1);
+  const user = await getUserByAuthId("auth_user_123abc");
   if (!user || user.length === 0) {
     throw new Error("User not found");
   }
@@ -18,9 +18,9 @@ export const analyzeProduct = async (ingredients, imagePath, auth_user_id) => {
 You are a professional dermatologist and skincare formulator.
 
 User Profile:
-- Skin type: ${userProfile.skin_type || "Unknown"}
-- Main concerns: ${userProfile.main_concerns || "None specified"}
-- Allergies/Sensitivities: ${userProfile.allergies || "None"}
+- Skin type: Oily"}
+- Main concerns: acne"} 
+- Allergies/Sensitivities: None}
 
 Ingredients extracted:
 ${ingredients}

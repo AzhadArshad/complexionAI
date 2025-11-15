@@ -13,3 +13,229 @@
   justify-content: center;
   margin: var(--spacing-xl) 0;
 }
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+}
+
+.sparkle-icon {
+  animation: sparkle 1.5s ease-in-out infinite;
+  color: var(--primary-color, #6366f1);
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1) rotate(180deg);
+  }
+}
+
+/* Analysis Results */
+.analysis-results {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border-color, #e5e7eb);
+}
+
+.result-header svg {
+  color: var(--primary-color, #6366f1);
+}
+
+.result-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-primary, #1f2937);
+}
+
+/* Ingredients Section */
+.ingredients-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: 12px;
+  border: 1px solid #bae6fd;
+}
+
+.ingredients-section h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.125rem;
+  color: var(--text-primary, #1f2937);
+}
+
+.ingredients-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ingredient-tag {
+  display: inline-block;
+  padding: 0.4rem 0.75rem;
+  background: white;
+  border: 1px solid #93c5fd;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #1e40af;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.ingredient-tag:hover {
+  background: #dbeafe;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Analysis Content */
+.analysis-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  max-height: 600px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  padding-right: 0.5rem;
+}
+
+/* Custom scrollbar for analysis content */
+.analysis-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.analysis-content::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.analysis-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.analysis-content::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.analysis-section {
+  padding: 1.25rem;
+  background: var(--card-background, #ffffff);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e5e7eb);
+}
+
+.section-title-main {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.375rem;
+  color: var(--text-primary, #1f2937);
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--primary-color, #6366f1);
+}
+
+.section-title {
+  margin: 0 0 1rem 0;
+  font-size: 1.125rem;
+  color: var(--primary-color, #6366f1);
+  font-weight: 600;
+}
+
+.section-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.content-h3 h4 {
+  margin: 1rem 0 0.5rem 0;
+  font-size: 1rem;
+  color: var(--text-secondary, #4b5563);
+  font-weight: 600;
+}
+
+.content-li {
+  margin-left: 1.5rem;
+}
+
+.content-li li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  color: var(--text-secondary, #4b5563);
+}
+
+.content-li li strong {
+  color: var(--text-primary, #1f2937);
+  font-weight: 600;
+}
+
+.content-p p {
+  margin: 0.5rem 0;
+  line-height: 1.7;
+  color: var(--text-secondary, #4b5563);
+}
+
+.content-p p strong {
+  color: var(--text-primary, #1f2937);
+  font-weight: 600;
+}
+
+.content-bold {
+  margin: 0.75rem 0;
+}
+
+.content-bold strong {
+  display: block;
+  padding: 0.75rem;
+  background: #fef3c7;
+  border-left: 3px solid #f59e0b;
+  border-radius: 4px;
+  color: #92400e;
+  font-weight: 600;
+}
+
+/* Typing Cursor Animation */
+.typing-cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1em;
+  background-color: var(--primary-color, #6366f1);
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
